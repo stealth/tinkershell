@@ -14,7 +14,7 @@ I am currently researching IoT and embedded Linux platforms. The
 Call for solidarity
 -------------------
 
-Please also check the post of ![our friends at THC](https://github.com/hackerschoice/CVE-2021-26855) about censorship of PoC's!
+Please also check the post of [our friends at THC](https://github.com/hackerschoice/CVE-2021-26855) about censorship of PoC's!
 
 
 Vulnerability
@@ -24,7 +24,7 @@ The *Tinkerboard* usually runs a Debian like embedded distro called *TinkerOS*
 The vulnerability is within the `gpio` binary, which is a suid root binary at
 the standard installation:
 
-```
+```C
  235 static void doLoad (int argc, char *argv [])
  236 {
  237   char *module1, *module2 ;
